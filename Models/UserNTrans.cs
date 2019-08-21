@@ -33,7 +33,10 @@ namespace BankAccount
         [MinLength(6,ErrorMessage="Password must be at least 2 characters.")]
         public string Password {get; set;}
 
+        [Column("created_at")]
         public DateTime CreatedAt{get; set;} = DateTime.Now;
+        
+        [Column("updated_at")]
         public DateTime UpdatedAt {get; set;} = DateTime.Now;
 
         [NotMapped]
@@ -42,21 +45,28 @@ namespace BankAccount
         public string Confirm {get; set;}
 
         public List<Transactions> TransMade {get; set;}
+
+        [Column("balance")]
+        public decimal Balance {get; set;} = 0;
+
     }
 
     public class Transactions
     {
         [Key]
+        [Column("trans_id")]
         public int TransId {get; set;}
 
         public UserReg Owner {get; set;}
 
+        [Column("user_id")]
         public int UserId {get; set;}
 
         [Required]
         [Column("amount")]
         public decimal Amount {get; set;}
 
+        [Column("created_at")]
         public DateTime CreatedAt{get; set;} = DateTime.Now;
     }
 }

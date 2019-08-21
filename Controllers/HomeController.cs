@@ -95,26 +95,41 @@ namespace BankAccount.Controllers
                             .Include(u => u.TransMade)
                             .FirstOrDefault(u => u.UserId == UserSess);
             ViewBag.trans = converted.NewUser.TransMade.OrderByDescending(t => t.CreatedAt);
-            Transactions Sum = new Transactions();
-            Sum.Amount = 0;
-            foreach(var tran in converted.NewUser.TransMade)
-            {
-                Sum.Amount += tran.Amount;
-            }
-            ViewBag.Balance= Math.Round(Sum.Amount,2);
+            ViewBag.Balance = Math.Round(converted.NewUser.Balance,2);
+            // Transactions Sum = new Transactions();
+            // Sum.Amount = 0;
+            // foreach(var tran in converted.NewUser.TransMade)
+            // {
+            //     Sum.Amount += tran.Amount;
+            // }
+            // ViewBag.Balance= Math.Round(Sum.Amount,2);
             return View(converted);
         }
 
         [HttpPost("trans")]
         public IActionResult Transactions(Transactions newTrans)
         {
-            var user = DbContext.Users.Include(u => u.TransMade).FirstOrDefault(u => u.UserId == HttpContext.Session.GetInt32("UserId"));
+            var user = DbContext.Users
+                        .Include(u => u.TransMade)
+                        .FirstOrDefault(u => u.UserId == HttpContext.Session.GetInt32("UserId"));
+
+            // user.TransMade += newTrans.Amount;
             Transactions trans = new Transactions();
             if(ModelState.IsValid)
             {
-                trans.Amount = newTrans.Amount;
-                user.TransMade.Add(trans);
-                DbContext.SaveChanges();
+                if(newTrans.Amount <0 && Math.Abs(newTrans.Amount) > user.Balance)
+                {
+                    // ModelState.AddModelError("NewTrans.Amount", "Insufficent funds");
+                    TempData["Error"] = "Insufficent funds";
+                    return RedirectToAction("Account", new {id = user.UserId});
+                }
+                else
+                {
+                    user.Balance += newTrans.Amount;
+                    trans.Amount = newTrans.Amount;
+                    user.TransMade.Add(trans);
+                    DbContext.SaveChanges();
+                }
                 return RedirectToAction("Account", new {id = user.UserId});
             }
             else{

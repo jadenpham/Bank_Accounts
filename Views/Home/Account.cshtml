@@ -13,6 +13,10 @@
         <h1>Welcome @Model.NewUser.FirstName</h1>
         <h3>Current balance is: $@ViewBag.Balance</h3>
         <div>
+            @if(TempData != null)
+            {
+                <h1 id="error">@TempData["Error"]</h1>
+            }
             <form asp-action="Transactions" asp-controller="Home" method="post">
                 <h3>Deposit/Withdraw</h3>
                 <input asp-for="NewTrans.Amount">

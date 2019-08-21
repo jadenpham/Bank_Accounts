@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankAccount.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20190820023404_FirstMigration")]
+    [Migration("20190821170105_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,14 +22,17 @@ namespace BankAccount.Migrations
             modelBuilder.Entity("BankAccount.Transactions", b =>
                 {
                     b.Property<int>("TransId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("trans_id");
 
                     b.Property<decimal>("Amount")
                         .HasColumnName("amount");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("created_at");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnName("user_id");
 
                     b.HasKey("TransId");
 
@@ -44,7 +47,11 @@ namespace BankAccount.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<decimal>("Balance")
+                        .HasColumnName("balance");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -62,7 +69,8 @@ namespace BankAccount.Migrations
                         .IsRequired()
                         .HasColumnName("pw");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("UserId");
 

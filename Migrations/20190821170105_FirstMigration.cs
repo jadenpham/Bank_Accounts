@@ -18,8 +18,9 @@ namespace BankAccount.Migrations
                     l_name = table.Column<string>(nullable: false),
                     email = table.Column<string>(nullable: false),
                     pw = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                    created_at = table.Column<DateTime>(nullable: false),
+                    updated_at = table.Column<DateTime>(nullable: false),
+                    balance = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,27 +31,27 @@ namespace BankAccount.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    TransId = table.Column<int>(nullable: false)
+                    trans_id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false),
+                    user_id = table.Column<int>(nullable: false),
                     amount = table.Column<decimal>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    created_at = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.TransId);
+                    table.PrimaryKey("PK_Transactions", x => x.trans_id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Transactions_Users_user_id",
+                        column: x => x.user_id,
                         principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserId",
+                name: "IX_Transactions_user_id",
                 table: "Transactions",
-                column: "UserId");
+                column: "user_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
